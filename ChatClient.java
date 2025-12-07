@@ -7,7 +7,7 @@ public class ChatClient {
         
         try {
 
-            Socket socket = new Socket("localhost", 5000);
+            Socket socket = new Socket("10.200.195.81", 5000);
             System.out.println("Connected to server!");
 
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
