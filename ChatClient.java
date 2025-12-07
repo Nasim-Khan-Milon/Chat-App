@@ -12,8 +12,25 @@ public class ChatClient {
 
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter message: ");
+
+            new Thread(() -> {
+
+                try {
+
+                    String inComingMessage;
+                    while((inComingMessage = in.readLine()) != null) {
+                        System.out.println("Friend: " + inComingMessage);
+                    }
+
+                } catch (IOException e) {
+                    System.out.println("Connection closed.");
+                }
+
+            }).start();
 
             while (true) {
                 String message = scanner.nextLine();

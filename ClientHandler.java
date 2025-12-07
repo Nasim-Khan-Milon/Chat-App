@@ -20,7 +20,7 @@ public class ClientHandler extends Thread {
 
             String message;
             while ((message = in.readLine()) != null) {
-                System.out.println(message);
+                // System.out.println(message);
                 out.println(message);
             }
 
