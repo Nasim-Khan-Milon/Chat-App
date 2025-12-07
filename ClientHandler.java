@@ -2,30 +2,58 @@ import java.io.*;
 import java.net.*;
 
 public class ClientHandler extends Thread {
-    private Socket fromClient;
-    private Socket toClient;
 
-    public ClientHandler(Socket fromClient, Socket toClient) {
-        this.fromClient = fromClient;
-        this.toClient = toClient;
+    private Socket socket;         // each client has ONLY ONE socket
+    private ClientHandler partner; // reference to the other client
+
+    private BufferedReader in;
+    private PrintWriter out;
+
+    public ClientHandler(Socket socket) {
+        this.socket = socket;
     }
 
-    public void run () {
+    public void setPartner(ClientHandler partner) {
+        this.partner = partner;
+    }
 
+    // For sending messages safely from other handler
+    public void sendMessage(String msg) {
+        out.println(msg);
+    }
+
+    @Override
+    public void run() {
         try {
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(fromClient.getInputStream()));
-
-            PrintWriter out = new PrintWriter(toClient.getOutputStream(), true);
+            // Create input/output streams
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
 
             String message;
+
             while ((message = in.readLine()) != null) {
-                // System.out.println(message);
-                out.println(message);
+
+                // Exit handling
+                if (message.equalsIgnoreCase("exit")) {
+                    sendMessage("You left the chat.");
+
+                    if (partner != null) {
+                        partner.sendMessage("The other user has left the chat.");
+                    }
+
+                    break; // exit loop
+                }
+
+                // Forward normal messages to partner
+                if (partner != null) {
+                    partner.sendMessage("Partner: " + message);
+                }
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("A client disconnected unexpectedly.");
+        } finally {
+            try { socket.close(); } catch (IOException ex) {}
         }
     }
 }

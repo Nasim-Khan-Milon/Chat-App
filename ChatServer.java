@@ -15,8 +15,14 @@ public class ChatServer {
             Socket client2 = serverSocket.accept();
             System.out.println("Client 2 connected!");
 
-            new ClientHandler(client1, client2).start();
-            new ClientHandler(client2, client1).start();
+            ClientHandler handler1 = new ClientHandler(client1);
+            ClientHandler handler2 = new ClientHandler(client2);
+
+            handler1.setPartner(handler2);
+            handler2.setPartner(handler1);
+
+            handler1.start();
+            handler1.start();
 
         } catch (IOException e) {
             e.printStackTrace();

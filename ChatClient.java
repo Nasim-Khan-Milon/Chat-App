@@ -34,6 +34,14 @@ public class ChatClient {
 
             while (true) {
                 String message = scanner.nextLine();
+
+                if(message.equalsIgnoreCase("exit")) {
+                    out.println("exit");
+                    socket.close();
+                    System.out.println("You left the chat.");
+                    break;
+                }
+                
                 out.println(message);
             }
 
