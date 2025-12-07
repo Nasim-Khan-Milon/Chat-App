@@ -13,14 +13,12 @@ public class ChatClient {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter message: ");
-            String message = scanner.nextLine();
+            System.out.println("Enter message: ");
 
-            out.println(message);
-
-            out.close();
-            socket.close();
-            scanner.close();
+            while (true) {
+                String message = scanner.nextLine();
+                out.println(message);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
