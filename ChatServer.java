@@ -15,6 +15,13 @@ public class ChatServer {
             Socket client2 = serverSocket.accept();
             System.out.println("Client 2 connected!");
 
+            BufferedReader inFromClient1 = new BufferedReader(
+                new InputStreamReader((client1.getInputStream()))
+            );
+
+            String message = inFromClient1.readLine();
+            System.out.println("Message from Client  1: " + message);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
